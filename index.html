@@ -189,8 +189,10 @@
         }
         function moveButtonRandomly(button) {
             button.style.position = 'absolute';
-            button.style.top = Math.random() * 50 + 25 + '%';
-            button.style.left = Math.random() * 50 + 25 + '%';
+            const topRange = Math.random() > 0.5 ? [55, 70] : [30, 45];
+            button.style.top = Math.random() * (topRange[1] - topRange[0]) + topRange[0] + '%';
+            const leftRange = Math.random() > 0.5 ? [55, 70] : [30, 45];
+            button.style.left = Math.random() * (leftRange[1] - leftRange[0]) + leftRange[0] + '%';
         }
         function explodeButton(button) {
             button.classList.add('explode');
