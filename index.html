@@ -36,8 +36,13 @@
             transition: box-shadow 0.3s;
             animation: beat 1s infinite;
         }
-        button:hover {
-            box-shadow: 0 0 20px #ff69b4, 0 0 30px #ff69b4;
+        button.yes {
+            background-color: #4CAF50; /* Green */
+            clip-path: none;
+        }
+        button.no {
+            background-color: #f44336; /* Red */
+            clip-path: none;
         }
         @keyframes beat {
             0%, 100% {
@@ -104,6 +109,28 @@
             90% { opacity: 1; }
             100% { top: 105%; opacity: 0; }
         }
+        .explode {
+            animation: explode 1s ease-out forwards;
+        }
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        .firework {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            z-index: 15;
+            pointer-events: none;
+            animation: firework 2s ease-out forwards;
+            box-shadow: 0 0 6px currentColor;
+        }
+        @keyframes firework {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -120,10 +147,15 @@
         <button onclick="nextScreen()"></button>
     </div>
     <div id="screen3" class="screen">
-        <h1>Question 3</h1>
+        <h1>Will you be my Valentine?</h1>
+        <div style="display: flex; gap: 20px;">
+            <button class="yes" onclick="sayYes()">Yes</button>
+            <button class="no" onclick="sayNo()">No</button>
+        </div>
     </div>
     <script>
         let currentScreen = 1;
+        let noClickCount = 0;
         function nextScreen() {
             document.getElementById('screen' + currentScreen).classList.remove('active');
             currentScreen++;
@@ -131,6 +163,61 @@
                 currentScreen = 3; // Stay on last screen
             }
             document.getElementById('screen' + currentScreen).classList.add('active');
+        }
+        function sayYes() {
+            document.getElementById('screen3').innerHTML = '<h1>🥹🥹🥹🥹🥹🥹 I love you! ❤️❤️❤️❤️❤️</h1>';
+            addConfetti();
+        }
+        function sayNo() {
+            noClickCount++;
+            const h1 = document.querySelector('#screen3 h1');
+            const noButton = document.querySelector('.no');
+            if (noClickCount === 1) {
+                moveButtonRandomly(noButton);
+                h1.textContent = "I'll get you a Caramel Macchiato from Gregory's";
+            } else if (noClickCount === 2) {
+                moveButtonRandomly(noButton);
+                h1.textContent = "and also get you some Tiramisu";
+            } else if (noClickCount === 3) {
+                moveButtonRandomly(noButton);
+                h1.textContent = "also a nice thriller book to read";
+            } else if (noClickCount === 4) {
+                explodeButton(noButton);
+                h1.textContent = "Taylor said you have to say yes";
+                document.querySelector('.yes').style.animationDuration = '0.5s';
+            }
+        }
+        function moveButtonRandomly(button) {
+            button.style.position = 'absolute';
+            button.style.top = Math.random() * 70 + 10 + '%';
+            button.style.left = Math.random() * 70 + 10 + '%';
+        }
+        function explodeButton(button) {
+            button.classList.add('explode');
+            setTimeout(() => button.remove(), 1000);
+        }
+        function addConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.id = 'confetti';
+            confettiContainer.style.position = 'absolute';
+            confettiContainer.style.top = '0';
+            confettiContainer.style.left = '0';
+            confettiContainer.style.width = '100%';
+            confettiContainer.style.height = '100%';
+            confettiContainer.style.pointerEvents = 'none';
+            confettiContainer.style.zIndex = '10';
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'][Math.floor(Math.random() * 6)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animation = 'fall 3s linear infinite';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confettiContainer.appendChild(confetti);
+            }
+            document.body.appendChild(confettiContainer);
         }
     </script>
     <div class="hearts">
