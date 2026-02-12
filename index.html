@@ -193,6 +193,9 @@
             button.style.top = Math.random() * (topRange[1] - topRange[0]) + topRange[0] + '%';
             const leftRange = Math.random() > 0.5 ? [55, 70] : [30, 45];
             button.style.left = Math.random() * (leftRange[1] - leftRange[0]) + leftRange[0] + '%';
+            // Make button smaller
+            const scale = Math.max(0.3, 1 - noClickCount * 0.2);
+            button.style.transform = `scale(${scale})`;
         }
         function explodeButton(button) {
             button.classList.add('explode');
