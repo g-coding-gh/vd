@@ -54,6 +54,27 @@
             clip-path: none;
         }
 
+        /* Background music toggle */
+        .music-toggle {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 9999;
+            width: auto;
+            height: auto;
+            padding: 10px 12px;
+            font-size: 14px;
+            border-radius: 999px;
+            clip-path: none;
+            animation: none;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.65);
+        }
+
+        .music-toggle.is-off {
+            opacity: 0.75;
+            box-shadow: none;
+        }
+
         @keyframes beat {
 
             0%,
@@ -429,11 +450,22 @@
             .screen {
                 padding: 10px;
             }
+
+            .music-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 9px 10px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Add your own audio file here (for example: audio/love-story.mp3) -->
+    <audio id="bg-music" src="./audio/love-story.mp3" preload="auto" loop playsinline></audio>
+    <button id="music-toggle" class="music-toggle is-off" type="button" onclick="toggleMusic()">Music</button>
+
     <img src="./images/tenant_zoom.gif" alt="The Tenant" class="top-left-image">
     <img src="./images/Taylor Swift Love GIF.gif" alt="The Tenant" class="top-right-image">
     <img src="./images/Italian Coffee Sticker by The Essential Baking Company.gif" alt="The Tenant"
@@ -459,7 +491,44 @@
         let currentScreen = 1;
         let noClickCount = 0;
         let buttonsDisabled = false; // Set this to true/false as needed
+
+        // Background music (mobile browsers require a user gesture to start audio)
+        let musicStarted = false;
+        function startMusic() {
+            const audio = document.getElementById('bg-music');
+            if (!audio || musicStarted) return;
+            audio.volume = 0.35;
+            audio.play().then(() => {
+                musicStarted = true;
+                const toggle = document.getElementById('music-toggle');
+                if (toggle) toggle.classList.remove('is-off');
+            }).catch(() => {
+                // Autoplay blocked until user interacts
+            });
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            const toggle = document.getElementById('music-toggle');
+            if (!audio) return;
+            if (audio.paused) {
+                audio.volume = 0.35;
+                audio.play().then(() => {
+                    musicStarted = true;
+                    if (toggle) toggle.classList.remove('is-off');
+                }).catch(() => {
+                    // ignored
+                });
+            } else {
+                audio.pause();
+                if (toggle) toggle.classList.add('is-off');
+            }
+        }
+
+        // Best-effort: start music on the first tap/click anywhere
+        document.addEventListener('pointerdown', startMusic, { once: true });
         function nextScreen() {
+            startMusic();
             document.getElementById('screen' + currentScreen).classList.remove('active');
             currentScreen++;
             if (currentScreen > 3) {
