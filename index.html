@@ -255,7 +255,9 @@
             max-width: 80vw;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            text-align: center;
             opacity: 0;
             animation: label-appear 0.4s 0.35s ease-out forwards;
         }
@@ -442,7 +444,7 @@
         <button onclick="nextScreen()"></button>
     </div>
     <div id="screen2" class="screen">
-        <h1>A very important question to ask you &#128561;</h1>
+        <h1 style="z-index: 20;">A very important question to ask you &#128561;</h1>
         <button onclick="nextScreen()"></button>
     </div>
     <div id="screen3" class="screen">
@@ -631,8 +633,6 @@
             const vw = window.innerWidth;
             const vh = window.innerHeight;
 
-            const x = vw * 0.15 + Math.random() * vw * 0.7;
-            const y = vh * 0.15 + Math.random() * vh * 0.65;
             const rot = (Math.random() - 0.5) * 22;
             // const label = coffeeTexts[Math.floor(Math.random() * coffeeTexts.length)];
             // const label = "What if I get you a caramel machiatto";
@@ -641,15 +641,17 @@
             // Ink splat
             const splat = document.createElement('div');
             splat.className = 'stamp-splat';
-            splat.style.left = x + 'px';
-            splat.style.top = y + 'px';
+            splat.style.left = '50%';
+            splat.style.top = '50%';
             layer.appendChild(splat);
 
             // Stamp wrapper
             const wrap = document.createElement('div');
             wrap.className = 'stamp';
-            wrap.style.left = x + 'px';
-            wrap.style.top = y + 'px';
+            wrap.style.left = '50%';
+            wrap.style.top = '50%';
+            // IMPORTANT: don't set `transform` here; `.stamp` is animated via keyframes that use `rotate(var(--rot))`.
+            // If `--rot` isn't set, the whole `transform` becomes invalid and the stamp drifts off-center.
             wrap.style.setProperty('--rot', rot + 'deg');
 
             // Circle + logo
