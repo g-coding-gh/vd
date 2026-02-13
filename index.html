@@ -250,7 +250,9 @@
             letter-spacing: 0.22em;
             padding: 0.45rem 1.4rem;
             clip-path: polygon(6px 0%, calc(100% - 6px) 0%, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0% calc(100% - 6px), 0% 6px);
-            white-space: nowrap;
+            white-space: normal;
+            word-wrap: break-word;
+            max-width: 80vw;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -380,6 +382,52 @@
                 opacity: 0;
             }
         }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+
+            button {
+                width: 100px;
+                height: 40px;
+                font-size: 14px;
+            }
+
+            .top-left-image, .top-right-image, .bottom-left-image, .bottom-right-image {
+                width: 120px;
+            }
+
+            .screen {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            button {
+                width: 80px;
+                height: 35px;
+                font-size: 12px;
+            }
+
+            .top-left-image, .top-right-image, .bottom-left-image, .bottom-right-image {
+                width: 80px;
+            }
+
+            .screen {
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -421,7 +469,7 @@
             document.getElementById('screen3').innerHTML = '<div id="stamps-layer"></div>';
             // fireStamp2(usTwo, "We look great together!!!!");
 
-            document.getElementById('screen3').innerHTML = `<img src="${usTwo}" style="width: 40%; height: auto;"></img><h1>We Look greate together🥹🥹🥹🥹🥹🥹 Best Choice ever, I love you! ❤️❤️❤️❤️❤️</h1>`;
+            document.getElementById('screen3').innerHTML = `<img src="${usTwo}" style="width: 40%; height: auto;"></img><h1>We Look great together🥹🥹🥹🥹🥹🥹 Best Choice ever, I love you! ❤️❤️❤️❤️❤️</h1>`;
             addConfetti();
         }
         function sayNo() {
